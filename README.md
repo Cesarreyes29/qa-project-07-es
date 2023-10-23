@@ -12,18 +12,13 @@ Primero tuvimos que hacer la importación de bibliotecas como import dataque es 
 Selenium import webdriver sirve para importar la clase "webdriver" de la biblioteca Selenium, que se utiliza para interactuar con un navegador web. También se usaron otras
 importaciones adicionales de Selenium, como Keys, By, expected_conditions, WebDriverWait, ActionChains y time import sleep para introducir pausas en la ejecución del programa.
 
+Se creó una función retrieve_phone_code la cuál recopila registros de mensajes de rendimiento del controlador agregado para bbuscar un código
+de confirmación del telefóno.
 
-    Se creó una función retrieve_phone_code la cuál recopila registros de mensajes de rendimiento del controlador agregado para buscar un código de confirmación de teléfono.
-    devuelve el código de confirmación del teléfono como una cadena y se almacena para poderlo usar posteriormente y continuar con la solicitud del taxi.
+Se crearon 2 clases, la primera es la clase UrbanRoutesPage en donde se definen una serie de localizadores que representan elementos de la
+página web, como campos de entrada, botones, etc y a su vez contiene métodos para interactuar con estos elementos anteriormente mencionados,
+como establecer una dirección de inicio, establecer una dirección de destino, hacer clic en un botón para solicitar un taxi, ingresar un número de teléfono, agregar un método de pago y más. También se agregó un método wait_for_load_information que es para esperar a que se cargue cierta información en la página.
 
-    Se crearon 2 clases la primera es la Clase UrbanRoutesPage en donde se definen una serie de localizadores que representan elementos de la página web, como campos de entrada, botones, etc y 
-    a su vez contiene métodos para interactuar con estos elementos anteriormente mencionados, como establecer una dirección de inicio, establecer una dirección de destino, hacer clic en 
-    un botón para solicitar un taxi, ingresar un número de teléfono, agregar un método de pago y más. También se agregó un método wait_for_load_information que para esperar a que se cargue 
-    cierta información en la página.
+La segunda clase es TestUrbanRoutes en la que se utiliza para definir pruebas automatizadas utilizando el marco de pruebas Pytest, los métodos que se incluyeron son el método setup_class que se ejecuta antes de que comiencen las pruebas y configura un controlador de Selenium. El método test_set_route que realiza una serie de acciones llamando a las funciones que se crearon antes para automatizar acciones en la página web, como estabecer rutas, ingresar información de contacto, método de pago y tomar un taxi, y el método teardown_class cierra el controlador de Selenium al final de las pruebas.
 
-    La segunda Clase es TestUrbanRoutes en la que se utiliza para definir pruebas automatizadas utilizando el marco de pruebas Pytest, los metodos que se incluyeron son 
-    el método setup_class se ejecuta antes de que comiencen las pruebas y configura un controlador de Selenium, el método test_set_route que realiza una serie de acciones llamando a las funciones 
-    que se crearon antes para automatizar acciones en la página web, como establecer rutas, ingresar información de contacto y método de pago, y tomar un taxi y el método teardown_class que cierra 
-    el controlador de Selenium al final de las pruebas.
-
-    Por último la sección if __name__ == '__main__' crea una instancia de la clase TestUrbanRoutes, ejecuta las pruebas y luego las cierra.
+Por último la sección if__name__ == '__main__' crea una instancia de la clase TestUrbanRoutes, ejecuta las pruebas y luego las cierra.
