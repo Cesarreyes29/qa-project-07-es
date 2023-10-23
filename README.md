@@ -8,9 +8,10 @@ de pago y las configuraciones extras para  poder realizar el pedido del taxi.
 
 Algunas de las funciones y herramientas que se utilizaron fueron las siguientes:
 
-    Primero tuvimos que hacer la Importación de bibliotecas como import data que es un módulo llamado "data" que se utiliza para almacenar datos como URLs, números de teléfono, etc.
-    Selenium import webdriver sirve para importar la clase "webdriver" de la biblioteca Selenium, que se utiliza para interactuar con un navegador web. También se usaron otras
-   importaciones adicionales de Selenium, como Keys, By, expected_conditions, WebDriverWait, ActionChains y time import sleep para introducir pausas en la ejecución del programa.
+Primero tuvimos que hacer la importación de bibliotecas como import dataque es un módulo llamado “data” que se utiliza para almacenar datos como URLs, números de teléfono, etc.
+Selenium import webdriver sirve para importar la clase "webdriver" de la biblioteca Selenium, que se utiliza para interactuar con un navegador web. También se usaron otras
+importaciones adicionales de Selenium, como Keys, By, expected_conditions, WebDriverWait, ActionChains y time import sleep para introducir pausas en la ejecución del programa.
+
 
     Se creó una función retrieve_phone_code la cuál recopila registros de mensajes de rendimiento del controlador agregado para buscar un código de confirmación de teléfono.
     devuelve el código de confirmación del teléfono como una cadena y se almacena para poderlo usar posteriormente y continuar con la solicitud del taxi.
