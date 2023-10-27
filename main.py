@@ -58,6 +58,10 @@ class UrbanRoutesPage:
     take_taxi_button = (By.XPATH, "/html/body/div/div/div[3]/div[4]/button")
     header_travel_information = (By.XPATH, "/html/body/div/div/div[5]/div[2]/div[2]/div[1]/div[1]/div[2]")
     order_header_time = (By.XPATH, "/html/body/div/div/div[5]/div[2]/div[1]/div/div[2]")
+    details_picker = (By.XPATH, "/html/body/div/div/div[3]/div[3]/div[2]/div[2]/div[4]/div[2]/div[1]/div/div[1]")
+    counter_value = (By.XPATH, "/html/body/div/div/div[3]/div[3]/div[2]/div[2]/div[4]/div[2]/div[3]/div/div[2]/div[1]/div/div[2]/div/div[2]")
+    text_button = (By.CLASS_NAME, "smart-button-main")
+    order_header_title = (By.CLASS_NAME, "order-header-title")
 
     def __init__(self, driver):
         self.driver = driver
@@ -79,7 +83,8 @@ class UrbanRoutesPage:
 
     def click_comfort_option(self):
         self.driver.find_element(*self.comfort_button).click()
-
+        element = self.driver.find_element(*self.details_picker).text
+        assert element == "Manta y pañuelos"
     def set_phone_number(self, the_phone):
 
         self.driver.find_element(*self.phone_button).click() #Dar click a agregar número
@@ -91,6 +96,9 @@ class UrbanRoutesPage:
         self.driver.find_element(*self.code_field).send_keys(retrieve_phone_code(self.driver)) #Agregar código de telefono
 
         self.driver.find_element(*self.next_button_code).click() #Click botón para confirmar código
+
+    def get_phone_number(self):
+        return self.driver.find_element(*self.phone_fill).get_property('value')
 
     def set_payment_method(self, the_card, the_code):
 
@@ -107,20 +115,37 @@ class UrbanRoutesPage:
 
         self.driver.find_element(*self.close_button).click() #Cerrar Ventana de agregar metodo de pago
 
-    def add_extra_details(self, comment_for_driver):
+    def get_card(self):
+        return self.driver.find_element(*self.card_number_field).get_property('value')
+
+    def get_code_card(self):
+        return self.driver.find_element(*self.card_code_field).get_property('value')
+
+    def add_comment_to_driver(self, comment_for_driver):
 
         self.driver.find_element(*self.comment_field).send_keys(comment_for_driver) #Agregar comentario al conductor
 
+    def get_comment(self):
+        return self.driver.find_element(*self.comment_field).get_property('value')
+
+    def add_blankets_and_scarves(self):
         self.driver.find_element(*self.check_slider).click() #Agregar manta y pañuelos
 
+
+    def add_two_icecream(self):
         action_chains = ActionChains(self.driver)
         action_chains.double_click(self.driver.find_element(*self.counter_plus)).perform() #Agregar Helado
-
+        element_count = self.driver.find_element(*self.counter_value).text
+        assert element_count == "2"
     def take_taxi(self):
         self.driver.find_element(*self.take_taxi_button).click()
+        element_text = self.driver.find_element(*self.text_button).text
+        assert element_text == "Pedir un taxi"
 
     def wait_for_load_information(self):
         WebDriverWait(self.driver, 35).until(EC.presence_of_element_located(self.header_travel_information))
+        header_element = self.driver.find_element(*self.order_header_title)
+        assert header_element.is_displayed()
 
 class TestUrbanRoutes:
     driver = None
@@ -144,16 +169,46 @@ class TestUrbanRoutes:
         assert routes_page.get_from() == address_from
         assert routes_page.get_to() == address_to
         routes_page.click_ask_taxi()
-        routes_page.click_comfort_option()
+
+    def test_choose_comfort(self):
+        rates_page = UrbanRoutesPage(self.driver)
+        rates_page.click_comfort_option()
+
+    def test_set_number_phone(self):
+        phone_page = UrbanRoutesPage(self.driver)
         the_phone = data.phone_number
-        routes_page.set_phone_number(the_phone)
+        phone_page.set_phone_number(the_phone)
+        assert phone_page.get_phone_number() == the_phone
+
+    def test_add_card(self):
+        card_page = UrbanRoutesPage(self.driver)
         the_card = data.card_number
         the_code = data.card_code
-        routes_page.set_payment_method(the_code, the_card)
+        card_page.set_payment_method(the_card, the_code)
+        assert card_page.get_card() == the_card
+        assert card_page.get_code_card() == the_code
+
+    def test_add_message_driver(self):
+        comments_page = UrbanRoutesPage(self.driver)
         comment_for_driver = data.message_for_driver
-        routes_page.add_extra_details(comment_for_driver)
-        routes_page.take_taxi()
-        routes_page.wait_for_load_information()
+        comments_page.add_comment_to_driver(comment_for_driver)
+        assert comments_page.get_comment() == comment_for_driver
+
+    def test_add_details(self):
+        details_page = UrbanRoutesPage(self.driver)
+        details_page.add_blankets_and_scarves()
+
+    def test_add_ice(self):
+        ice_page = UrbanRoutesPage(self.driver)
+        ice_page.add_two_icecream()
+
+    def test_take_taxi(self):
+        taxi_page = UrbanRoutesPage(self.driver)
+        taxi_page.take_taxi()
+
+    def test_wait_for_info(self):
+        info_page = UrbanRoutesPage(self.driver)
+        info_page.wait_for_load_information()
 
     @classmethod
     def teardown_class(cls):
